@@ -3,21 +3,9 @@ package main
 import (
 	"net/http"
 
-	"github.com/basedantoni/go-rss/internal/auth"
+	"github.com/basedantoni/go-rss/internal/database"
 )
 
-func (cfg *apiConfig) showUserHandler(w http.ResponseWriter, r *http.Request) {
-	apiKey, err := auth.GetApiKey(r.Header)
-	if err != nil {
-		respondWithError(w, http.StatusForbidden, "Invalid API Key")
-		return
-	}
-
-	user, err := cfg.DB.GetUser(r.Context(), apiKey)
-	if err != nil {
-		respondWithError(w, http.StatusNotFound, "User not found")
-		return
-	}
-
+func (cfg *apiConfig) showUserHandler(w http.ResponseWriter, r *http.Request, user database.User) {
 	respondWithJSON(w, http.StatusOK, user)
 }
