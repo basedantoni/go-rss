@@ -44,9 +44,15 @@ func (cfg *apiConfig) createFeedHandler(w http.ResponseWriter, r *http.Request, 
 	}
 
 	type response struct {
-		Feed       database.Feed      `json:"feed"`
+		Feed       Feed               `json:"feed"`
 		FeedFollow database.UsersFeed `json:"feed_follow"`
 	}
 
-	respondWithJSON(w, http.StatusOK, response{Feed: feed, FeedFollow: feedFollow})
+	respondWithJSON(
+		w, http.StatusOK,
+		response{
+			Feed:       databaseFeedToFeed(feed),
+			FeedFollow: feedFollow,
+		},
+	)
 }

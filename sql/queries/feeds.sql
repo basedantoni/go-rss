@@ -8,3 +8,11 @@ SELECT * FROM feeds WHERE user_id = $1;
 
 -- name: GetAllFeeds :many
 SELECT * FROM feeds;
+
+-- name: GetNextFeedsToFetch :many
+SELECT * FROM feeds ORDER BY last_fetched_at DESC LIMIT $1;
+
+-- name: MarkFeedFetched :exec
+UPDATE feeds
+  SET (last_fetched_at, updated_at) = ($1, $1)
+  WHERE id = $2;
